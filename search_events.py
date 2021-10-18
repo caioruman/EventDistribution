@@ -136,6 +136,7 @@ def getEvents(data, events):
 
   # 0-10, 10-20, 20-30, 30-40, 40-50, 50+
   aux = 0
+  i = 0
 
   for k in range(len(data)):
     item = data[k]
@@ -152,13 +153,15 @@ def getEvents(data, events):
       # store aux
       index = int(aux/10)
       if index > 6:
-        index = 6
+        index = 5
 
       events[index] += 1
+      print(i)
       # reset aux
       aux = 0
     else:
       aux += item
+      i += 1
 
   return events
 
