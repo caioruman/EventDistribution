@@ -141,9 +141,11 @@ def getEvents(data, events):
     item = data[k]
 
     # Check each item in the array. While not 0, add to aux. When 0, store aux, set it to 0. Get the max wind between the start and end.
+    if (np.isnan(item)) and aux == 0:
+      continue
     if item == 0 and aux == 0:
       continue
-    elif item == 0:
+    elif item == 0 or np.isnan(item):
       # Streak ended
       # get max wind
       # for later
