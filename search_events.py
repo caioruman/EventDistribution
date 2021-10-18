@@ -84,8 +84,8 @@ def main():
       pr = pr.PREC_ACC_NC
       pr = pr[:,i1:i2,j1:j2]  
 
-      pr_lat = pr_lat[:,i1:i2,j1:j2]  
-      pr_lon = pr_lon[:,i1:i2,j1:j2]  
+      pr_lat = pr_lat[i1:i2,j1:j2]  
+      pr_lon = pr_lon[i1:i2,j1:j2]  
 
       print(f"Month: {m}")
 
