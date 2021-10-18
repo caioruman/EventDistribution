@@ -116,6 +116,9 @@ def main():
         # 0-10, 10-20, 20-30, 30-40, 40-50, 50+
         events_limits = [10,20,30,40,50,60]
     
+    print(events_wsn)
+    print(events_sn)
+    print(events_pr)
     sys.exit()
 
 
