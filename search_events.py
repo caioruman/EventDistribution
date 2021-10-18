@@ -91,7 +91,7 @@ def main():
       dataf += relativedelta(months=1)
       
 
-      print(wsn)
+      #print(wsn)
 
       wsn = wsn.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
       sn = sn.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
@@ -99,7 +99,7 @@ def main():
       vv = vv.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
       pr = pr.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))  
 
-      print(wsn)    
+      #print(wsn)    
 
       for k, coords in enumerate(zip(city_lat, city_lon)):
 
@@ -110,7 +110,7 @@ def main():
 
         ii, jj = geo_idx([lat, lon], np.array([pr_lat, pr_lon]))
 
-        aux_wsn = wsn[:,i,j]
+        aux_wsn = wsn.SN_4C[:,i,j]
         aux_sn = sn[:,ii,jj]
         aux_uu = uu[:,ii,jj]
         aux_vv = vv[:,ii,jj]
