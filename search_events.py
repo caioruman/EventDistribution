@@ -137,7 +137,7 @@ def getEvents(data, events):
   # 0-10, 10-20, 20-30, 30-40, 40-50, 50+
   aux = 0
 
-  for k in range(len(aux_wsn)):
+  for k in range(len(data)):
     item = data[k]
 
     # Check each item in the array. While not 0, add to aux. When 0, store aux, set it to 0. Get the max wind between the start and end.
