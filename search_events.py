@@ -5,7 +5,8 @@ import numpy as np
 import pandas as pd
 from glob import glob
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 #import matplotlib.pyplot as plt            # Module to produce figureimport matplotlib.colors as colors
 #import cartopy.crs as ccrs                 # Import cartopy ccrs
 #import cartopy.feature as cfeature         # Import cartopy common features
@@ -87,7 +88,7 @@ def main():
 
       datai = datetime.strptime(f'{y}-{m:02d}-01 00:00', '%Y-%m-%d %H:%M')
       dataf = datetime.strptime(f'{y}-{m:02d}-01 00:00', '%Y-%m-%d %H:%M')
-      dataf += timedelta(months=1)
+      dataf += relativedelta(months=1)
       
       wsn = wsn.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
       sn = sn.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
