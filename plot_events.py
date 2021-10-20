@@ -137,7 +137,11 @@ def plotBars(events, cities, var):
     plt.yticks(fontsize=22)
     ax.set_title(f'Monthly distribution of {var} for {city} in SWE (mm) - 2000-2013', fontsize=22)
     plt.grid(axis='y', linestyle = '--', linewidth = 0.5, color='gray')
-    ax.legend(fontsize=20, loc="upper center")
+    
+    if var == 'Liquid Precipitation':
+      ax.legend(fontsize=20, loc="upper left")
+    else:  
+      ax.legend(fontsize=20, loc="upper center")
 
     plt.savefig(f"{city}_{var}.png".replace(' ', '_'))
 
