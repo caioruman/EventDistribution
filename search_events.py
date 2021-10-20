@@ -7,6 +7,7 @@ from glob import glob
 import sys
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import pickle
 #import matplotlib.pyplot as plt            # Module to produce figureimport matplotlib.colors as colors
 #import cartopy.crs as ccrs                 # Import cartopy ccrs
 #import cartopy.feature as cfeature         # Import cartopy common features
@@ -136,23 +137,11 @@ def main():
     #print(events_wsn)
     #print(events_sn)
     #print(events_pr)
-    #sys.exit()
-  
-    f = open(f'distribution_{y}.dat', 'w')
+    #sys.exit()      
 
-    f.write(city)
-    f.write("\nWet Snow\n")
-
-    f.write(events_wsn)
-    f.write("\nSnow\n")
-
-    f.write(events_sn)
-    f.write("\nRain\n")
-
-    f.write(events_pr)
-    f.write("\n")
-
-    f.close()
+    pickle.dump( events_wsn, open( f"wet_snow_{y}.p", "wb" ) )
+    pickle.dump( events_sn, open( f"snow_{y}.p", "wb" ) )
+    pickle.dump( events_pr, open( f"rain_{y}.p", "wb" ) )    
 
 
 def getEvents(data, events):
