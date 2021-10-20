@@ -72,26 +72,66 @@ def main():
 def plotBars(events, cities, var):
 
   labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  width = 0.5
+  width = 0.75
 
   for i, city in enumerate(cities):
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(14,10))
 
-    ax.bar(labels, events[:,i,1], width, label='10-20')
-    ax.bar(labels, events[:,i,2], width, bottom=events[:,i,1],
+    ax1 = ax.bar(labels, events[:,i,1], width, label='10-20')    
+
+    ax2 = ax.bar(labels, events[:,i,2], width, bottom=events[:,i,1],
           label='20-30')
-    ax.bar(labels, events[:,i,3], width, bottom=events[:,i,1] + events[:,i,2],
+    ax3 = ax.bar(labels, events[:,i,3], width, bottom=events[:,i,1] + events[:,i,2],
           label='30-40')
-    ax.bar(labels, events[:,i,4], width, bottom=events[:,i,1] + events[:,i,2] + events[:,i,3],
+    ax4 = ax.bar(labels, events[:,i,4], width, bottom=events[:,i,1] + events[:,i,2] + events[:,i,3],
           label='40-50')
-    ax.bar(labels, events[:,i,5], width, bottom=events[:,i,1] + events[:,i,2] + events[:,i,3] + events[:,i,4],
+    ax5 = ax.bar(labels, events[:,i,5], width, bottom=events[:,i,1] + events[:,i,2] + events[:,i,3] + events[:,i,4],
           label='50+')
 
-    ax.set_ylabel('Number of events')
-    ax.set_title(f'Monthly distribution of {var} for {city} in SWE (mm) - 2000-2013')
+    y_offset = -5
+    for r1, r2, r3, r4, r5 in zip(ax1, ax2, ax3, ax4, ax5):
+      h1 = r1.get_height()
+      h2 = r2.get_height()
+      h3 = r3.get_height()
+      h4 = r4.get_height()
+      h5 = r5.get_height()
+      
+      if h1 != 0:
+        y_offset = -5
+        if h1 < 4:
+          y_offset = -2
+        plt.text(r1.get_x() + r1.get_width() / 2., h1 + r1.get_y() + y_offset, "%d" % h1, ha="center", va="bottom", color="k", fontsize=10, fontweight="bold")
+      if h2 != 0:       
+        y_offset = -5
+        if h2 < 4:
+          y_offset = -2
+        plt.text(r2.get_x() + r2.get_width() / 2., h2 + r2.get_y()+ y_offset, "%d" % h2, ha="center", va="bottom", color="k", fontsize=10, fontweight="bold")
+      if h3 != 0:
+        y_offset = -5
+        if h3 < 5:
+          y_offset = -2
+        plt.text(r3.get_x() + r3.get_width() / 2., h3 + r3.get_y()+ y_offset, "%d" % h3, ha="center", va="bottom", color="k", fontsize=10, fontweight="bold")
+      if h4 != 0:
+        y_offset = -5
+        if h4 < 4:
+          y_offset = -2
+        plt.text(r4.get_x() + r4.get_width() / 2., h4 + r4.get_y() + y_offset, "%d" % h4, ha="center", va="bottom", color="k", fontsize=10, fontweight="bold")
+      if h5 != 0:
+        y_offset = -5
+        if h5 < 4:
+          y_offset = -2
+        plt.text(r5.get_x() + r5.get_width() / 2., h5 + r5.get_y() + y_offset, "%d" % h5, ha="center", va="bottom", color="k", fontsize=10, fontweight="bold")
+
+      
+
+    ax.set_ylim(0,125)
+    ax.set_ylabel('Number of events', fontsize=22)
+    plt.xticks(fontsize=22)
+    plt.yticks(fontsize=22)
+    ax.set_title(f'Monthly distribution of {var} for {city} in SWE (mm) - 2000-2013', fontsize=22)
     plt.grid(axis='y', linestyle = '--', linewidth = 0.5, color='gray')
-    ax.legend()
+    ax.legend(fontsize=20, loc="upper center")
 
     plt.savefig(f"{city}_{var}.png".replace(' ', '_'))
 
