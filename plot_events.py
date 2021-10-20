@@ -37,7 +37,7 @@ def main():
   '''
 
   # annual data
-  i = 1
+  i = 0
   for y in range(datai, dataf+1):
     print(f"Year: {y}")
     
@@ -45,7 +45,7 @@ def main():
     #print(events_sn)
     #print(events_pr)
     #sys.exit()      
-
+    i += 1
     if i == 1:
       events_wsn = pickle.load( open( f"wet_snow_{y}.p", "rb" ) )
       events_sn = pickle.load( open( f"snow_{y}.p", "rb" ) )
@@ -92,7 +92,7 @@ def plotBars(events, cities, var):
     ax.set_title(f'Monthly distribution of {var} for {city} - 2000-2013')
     ax.legend()
 
-    plt.savefig(f'{city}_{var}.png')
+    plt.savefig(f"{city}_{var}.png")
 
 if __name__ == '__main__':
   main()
