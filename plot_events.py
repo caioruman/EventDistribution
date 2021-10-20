@@ -15,7 +15,7 @@ def main():
 #  st = f"/chinook/marinier/CONUS_2D/{sim}"
 
   datai = 2000
-  dataf = 2004  
+  dataf = 2013  
 
   #store = '/chinook/cruman/Data/WetSnow' 
 
@@ -72,7 +72,7 @@ def main():
 def plotBars(events, cities, var):
 
   labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  width = 0.35
+  width = 0.5
 
   for i, city in enumerate(cities):
 
@@ -88,8 +88,9 @@ def plotBars(events, cities, var):
     ax.bar(labels, events[:,i,5], width, bottom=events[:,i,1] + events[:,i,2] + events[:,i,3] + events[:,i,4],
           label='50+')
 
-    ax.set_ylabel('SWE (mm)')
-    ax.set_title(f'Monthly distribution of {var} for {city} - 2000-2013')
+    ax.set_ylabel('Number of events')
+    ax.set_title(f'Monthly distribution of {var} for {city} in SWE (mm) - 2000-2013')
+    plt.grid(axis='y', linestyle = '--', linewidth = 0.5, color='gray')
     ax.legend()
 
     plt.savefig(f"{city}_{var}.png".replace(' ', '_'))
