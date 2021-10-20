@@ -27,9 +27,10 @@ def main():
   city_lat = [47.42, 47.63, 47.01, 46.11, 45.87, 45.32]
   city_lon = [-68.32, -65.74, -65.47, -64.68, -66.53, -65.89]
 
-  events_wsn = np.zeros([6,6])
-  events_sn = np.zeros([6,6])
-  events_pr = np.zeros([6,6])
+  # Month, city, events
+  events_wsn = np.zeros([12,6,6])
+  events_sn = np.zeros([12,6,6])
+  events_pr = np.zeros([12,6,6])
 
   '''
  Start parameters: 
@@ -119,9 +120,9 @@ def main():
         aux_vv = vv[:,ii,jj]
         aux_pr = pr[:,ii,jj]
 
-        events_wsn[k] = getEvents(aux_wsn, events_wsn[k])    
-        events_sn[k] = getEvents(aux_sn, events_sn[k])
-        events_pr[k] = getEvents(aux_pr, events_pr[k])
+        events_wsn[m-1,k,:] = getEvents(aux_wsn, events_wsn[k])    
+        events_sn[m-1,k,:] = getEvents(aux_sn, events_sn[k])
+        events_pr[m-1,k,:] = getEvents(aux_pr, events_pr[k])
 
         # 0-10, 10-20, 20-30, 30-40, 40-50, 50+
         events_limits = [10,20,30,40,50,60]
