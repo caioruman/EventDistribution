@@ -81,18 +81,18 @@ def plotBars(events, cities, var):
     ax.bar(labels, events[:,i,1], width, label='10-20')
     ax.bar(labels, events[:,i,2], width, bottom=events[:,i,1],
           label='20-30')
-    ax.bar(labels, events[:,i,3], width, bottom=events[:,i,2],
+    ax.bar(labels, events[:,i,3], width, bottom=events[:,i,1] + events[:,i,2],
           label='30-40')
-    ax.bar(labels, events[:,i,4], width, bottom=events[:,i,3],
+    ax.bar(labels, events[:,i,4], width, bottom=events[:,i,1] + events[:,i,2] + events[:,i,3],
           label='40-50')
-    ax.bar(labels, events[:,i,5], width, bottom=events[:,i,4],
+    ax.bar(labels, events[:,i,5], width, bottom=events[:,i,1] + events[:,i,2] + events[:,i,3] + events[:,i,4],
           label='50+')
 
     ax.set_ylabel('SWE (mm)')
     ax.set_title(f'Monthly distribution of {var} for {city} - 2000-2013')
     ax.legend()
 
-    plt.savefig(f"{city}_{var}.png")
+    plt.savefig(f"{city}_{var}.png".replace(' ', '_'))
 
 if __name__ == '__main__':
   main()
