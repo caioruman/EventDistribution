@@ -138,21 +138,21 @@ def main():
     #print(events_pr)
     #sys.exit()
   
-  f = open('distribution.dat', 'w')
+    f = open(f'distribution_{y}.dat', 'w')
 
-  f.write(city)
-  f.write("\nWet Snow\n")
+    f.write(city)
+    f.write("\nWet Snow\n")
 
-  f.write(events_wsn)
-  f.write("\nSnow\n")
+    f.write(events_wsn)
+    f.write("\nSnow\n")
 
-  f.write(events_sn)
-  f.write("\nRain\n")
+    f.write(events_sn)
+    f.write("\nRain\n")
 
-  f.write(events_pr)
-  f.write("\n")
+    f.write(events_pr)
+    f.write("\n")
 
-  f.close()
+    f.close()
 
 
 def getEvents(data, events):
