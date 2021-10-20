@@ -125,7 +125,13 @@ def plotBars(events, cities, var):
 
       
 
-    ax.set_ylim(0,125)
+    if var == 'Liquid Precipitation':
+      lim = 300
+    elif var == 'Snow':
+      lim = 175
+    else:
+      lim = 125
+    ax.set_ylim(0,lim)
     ax.set_ylabel('Number of events', fontsize=22)
     plt.xticks(fontsize=22)
     plt.yticks(fontsize=22)
