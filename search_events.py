@@ -18,7 +18,7 @@ def main():
   sim = "CTRL"
   st = f"/chinook/marinier/CONUS_2D/{sim}"
 
-  datai = 2001
+  datai = 2000
   dataf = 2013  
 
   store = '/chinook/cruman/Data/WetSnow' 
@@ -59,6 +59,12 @@ def main():
       else:
         mi = 10
         mf = 12
+
+      if (y == 2000) and m < 10:
+        continue
+
+      if (y == 2013) and m > 9:
+        continue
 
       wsn = xr.open_dataset(f'{store}/{y}/WetSnow_SN_{y}{mi:02d}-{y}{mf:02d}.nc', engine='netcdf4')
           
@@ -127,10 +133,26 @@ def main():
         # 0-10, 10-20, 20-30, 30-40, 40-50, 50+
         events_limits = [10,20,30,40,50,60]
     
-    print(events_wsn)
-    print(events_sn)
-    print(events_pr)
-    sys.exit()
+    #print(events_wsn)
+    #print(events_sn)
+    #print(events_pr)
+    #sys.exit()
+  
+  f = open('distribution.dat', 'w')
+
+  f.write(city)
+  f.write("\nWet Snow\n")
+
+  f.write(events_wsn)
+  f.write("\nSnow\n")
+
+  f.write(events_sn)
+  f.write("\nRain\n")
+
+  f.write(events_pr)
+  f.write("\n")
+
+  f.close()
 
 
 def getEvents(data, events):
@@ -157,7 +179,7 @@ def getEvents(data, events):
         index = 5
 
       events[index] += 1
-      print(i)
+      #print(i)
       # reset aux
       aux = 0
     else:
