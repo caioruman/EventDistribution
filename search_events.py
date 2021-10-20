@@ -152,7 +152,7 @@ def getEvents(data, events):
       # for later
       # store aux
       index = int(aux/10)
-      if index > 6:
+      if index >= 6:
         index = 5
 
       events[index] += 1
