@@ -50,17 +50,17 @@ def main():
       events_wsn = pickle.load( open( f"wet_snow_{y}.p", "rb" ) )
       events_sn = pickle.load( open( f"snow_{y}.p", "rb" ) )
       events_pr = pickle.load( open( f"rain_{y}.p", "rb" ) )
-      print(events_wsn)
+      
     else:
       aux_wsn = pickle.load( open( f"wet_snow_{y}.p", "rb" ) )
       aux_sn = pickle.load( open( f"snow_{y}.p", "rb" ) )
       aux_pr = pickle.load( open( f"rain_{y}.p", "rb" ) )
-      print(aux_wsn)
+      
       events_wsn += aux_wsn
       events_sn += aux_sn
       events_pr += aux_pr
-      print(events_wsn)
-      sys.exit()
+      
+      
   
   # 0-10, 10-20, 20-30, 30-40, 40-50, 50+
   events_limits = [10,20,30,40,50,60]
