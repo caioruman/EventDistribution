@@ -120,9 +120,9 @@ def main():
         aux_vv = vv[:,ii,jj]
         aux_pr = pr[:,ii,jj]
 
-        events_wsn[m-1,k,:] = getEvents(aux_wsn, events_wsn[k])    
-        events_sn[m-1,k,:] = getEvents(aux_sn, events_sn[k])
-        events_pr[m-1,k,:] = getEvents(aux_pr, events_pr[k])
+        events_wsn[m-1,k,:] = getEvents(aux_wsn, events_wsn[m-1,k,:])    
+        events_sn[m-1,k,:] = getEvents(aux_sn, events_sn[m-1,k,:])
+        events_pr[m-1,k,:] = getEvents(aux_pr, events_pr[m-1,k,:])
 
         # 0-10, 10-20, 20-30, 30-40, 40-50, 50+
         events_limits = [10,20,30,40,50,60]
