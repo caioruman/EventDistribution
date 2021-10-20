@@ -66,7 +66,7 @@ def main():
   events_limits = [10,20,30,40,50,60]
   plotBars(events_wsn, city, 'Wet Snow')
   plotBars(events_sn, city, 'Snow')
-  plotBars(events_pr, city, 'Liquid Precipitation')
+  plotBars(events_pr-events_sn, city, 'Liquid Precipitation')
       
 
 def plotBars(events, cities, var):
@@ -128,7 +128,7 @@ def plotBars(events, cities, var):
     if var == 'Liquid Precipitation':
       lim = 300
     elif var == 'Snow':
-      lim = 175
+      lim = 225
     else:
       lim = 125
     ax.set_ylim(0,lim)
