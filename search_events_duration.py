@@ -19,7 +19,7 @@ def main():
   sim = "CTRL"
   st = f"/chinook/marinier/CONUS_2D/{sim}"
 
-  datai = 2000
+  datai = 2010
   dataf = 2013  
 
   store = '/chinook/cruman/Data/WetSnow' 
@@ -32,7 +32,7 @@ def main():
   events_wsn = np.zeros([12,6,6])
   dur_events_wsn = np.zeros([12,6,240])
   events_sn = np.zeros([12,6,6])
-  dur_events_sn = np.zeros([12,6,240])
+  dur_events_sn = np.zeros([12,6,320])
   events_pr = np.zeros([12,6,6])
   dur_events_pr = np.zeros([12,6,480])
 
