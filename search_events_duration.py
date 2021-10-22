@@ -30,11 +30,11 @@ def main():
 
   # Month, city, events
   events_wsn = np.zeros([12,6,6])
-  dur_events_wsn = np.zeros([12,6,50])
+  dur_events_wsn = np.zeros([12,6,120])
   events_sn = np.zeros([12,6,6])
-  dur_events_sn = np.zeros([12,6,50])
+  dur_events_sn = np.zeros([12,6,120])
   events_pr = np.zeros([12,6,6])
-  dur_events_pr = np.zeros([12,6,50])
+  dur_events_pr = np.zeros([12,6,120])
 
   '''
  Start parameters: 
