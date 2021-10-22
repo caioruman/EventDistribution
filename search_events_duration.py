@@ -30,11 +30,11 @@ def main():
 
   # Month, city, events
   events_wsn = np.zeros([12,6,6])
-  dur_events_wsn = np.zeros([12,6,120])
+  dur_events_wsn = np.zeros([12,6,240])
   events_sn = np.zeros([12,6,6])
-  dur_events_sn = np.zeros([12,6,120])
+  dur_events_sn = np.zeros([12,6,240])
   events_pr = np.zeros([12,6,6])
-  dur_events_pr = np.zeros([12,6,120])
+  dur_events_pr = np.zeros([12,6,240])
 
   '''
  Start parameters: 
@@ -171,6 +171,7 @@ def getEvents(data, events, dur_events):
       # Waiting 6 hours before going to the next event
       i += 1
       if i < 6:
+        dur += 1
         continue
       else:      
         index = int(aux/10)
