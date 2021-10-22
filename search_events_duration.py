@@ -30,8 +30,11 @@ def main():
 
   # Month, city, events
   events_wsn = np.zeros([12,6,6])
+  dur_events_wsn = np.zeros([12,6,50])
   events_sn = np.zeros([12,6,6])
+  dur_events_sn = np.zeros([12,6,50])
   events_pr = np.zeros([12,6,6])
+  dur_events_pr = np.zeros([12,6,50])
 
   '''
  Start parameters: 
@@ -128,9 +131,9 @@ def main():
         aux_vv = vv[:,ii,jj]
         aux_pr = pr[:,ii,jj]
 
-        events_wsn[m-1,k,:] = getEvents(aux_wsn, events_wsn[m-1,k,:])    
-        events_sn[m-1,k,:] = getEvents(aux_sn, events_sn[m-1,k,:])
-        events_pr[m-1,k,:] = getEvents(aux_pr, events_pr[m-1,k,:])
+        events_wsn[m-1,k,:], dur_events_wsn[m-1,k,:] = getEvents(aux_wsn, events_wsn[m-1,k,:], dur_events_wsn[m-1,k,:])    
+        events_sn[m-1,k,:], dur_events_sn[m-1,k,:] = getEvents(aux_sn, events_sn[m-1,k,:], dur_events_sn[m-1,k,:])
+        events_pr[m-1,k,:], dur_events_pr[m-1,k,:] = getEvents(aux_pr, events_pr[m-1,k,:], dur_events_pr[m-1,k,:])
 
         # 0-10, 10-20, 20-30, 30-40, 40-50, 50+
         events_limits = [10,20,30,40,50,60]
@@ -140,16 +143,20 @@ def main():
     #print(events_pr)
     #sys.exit()      
 
-    pickle.dump( events_wsn, open( f"wet_snow_{y}.p", "wb" ) )
-    pickle.dump( events_sn, open( f"snow_{y}.p", "wb" ) )
-    pickle.dump( events_pr, open( f"rain_{y}.p", "wb" ) )    
+    pickle.dump( events_wsn, open( f"wet_snow_{y}_v2.p", "wb" ) )
+    pickle.dump( events_sn, open( f"snow_{y}_v2.p", "wb" ) )
+    pickle.dump( events_pr, open( f"rain_{y}_v2.p", "wb" ) )    
+    pickle.dump( dur_events_wsn, open( f"wet_snow_{y}_duration.p", "wb" ) )
+    pickle.dump( dur_events_sn, open( f"snow_{y}_duration.p", "wb" ) )
+    pickle.dump( dur_events_pr, open( f"rain_{y}_duration.p", "wb" ) ) 
 
 
-def getEvents(data, events):
+def getEvents(data, events, dur_events):
 
   # 0-10, 10-20, 20-30, 30-40, 40-50, 50+
   aux = 0
-  #i = 0
+  i = 0
+  dur = 0
 
   for k in range(len(data)):
     item = data[k]
@@ -161,22 +168,32 @@ def getEvents(data, events):
       continue
     elif item == 0 or np.isnan(item):
       # Streak ended
+      # Waiting 6 hours before going to the next event
+      i += 1
+      if i < 6:
+        continue
+      else:      
+        index = int(aux/10)
+        if index >= 6:
+          index = 5
+
       # get max wind
       # for later
       # store aux
-      index = int(aux/10)
-      if index >= 6:
-        index = 5
-
-      events[index] += 1
+        events[index] += 1
+        dur_events[dur] += 1
       #print(i)
       # reset aux
-      aux = 0
+        aux = 0
+        dur = 0
+        i = 0
     else: #if item != 0 and not np.isnan(item):
       aux += item
+      i = 0
+      dur += 1
       #i += 1
 
-  return events
+  return events, dur_events
 
              
           
