@@ -34,7 +34,7 @@ def main():
   events_sn = np.zeros([12,6,6])
   dur_events_sn = np.zeros([12,6,240])
   events_pr = np.zeros([12,6,6])
-  dur_events_pr = np.zeros([12,6,240])
+  dur_events_pr = np.zeros([12,6,480])
 
   '''
  Start parameters: 
