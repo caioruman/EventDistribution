@@ -61,7 +61,7 @@ def main():
     #print(aux_pr.shape)
     if aux_sn.shape[2] == 240:                
       events_sn[:,:,:240] += aux_sn        
-   else:                
+    else:
       events_sn += aux_sn
         
     events_wsn += aux_wsn
