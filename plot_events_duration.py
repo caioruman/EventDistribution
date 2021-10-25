@@ -97,10 +97,10 @@ def main():
   # 0-10, 10-20, 20-30, 30-40, 40-50, 50+
   labels = np.arange(0,320,6)
   
-  for c in enumerate(city):
-    plotEventDuration(wsn_6bins[c,:], labels, city[c], 'Wet Snow', 'Wet Snow')
-    plotEventDuration(sn_6bins[c,:], labels, city[c], 'Snow', 'Snow')
-    plotEventDuration(pr_6bins[c,:], labels, city[c], 'Liquid Precipitation', 'Liquid Precipitation')    
+  for c, item in enumerate(city):
+    plotEventDuration(wsn_6bins[c,:], labels, item, 'Wet Snow', 'Wet Snow')
+    plotEventDuration(sn_6bins[c,:], labels, item, 'Snow', 'Snow')
+    plotEventDuration(pr_6bins[c,:], labels, item, 'Liquid Precipitation', 'Liquid Precipitation')    
       
 def plotEventDuration(bins, labels, city, xlabel, fname):
   fig, ax = plt.subplots(figsize=(16,10))
