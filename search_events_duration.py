@@ -143,12 +143,12 @@ def main():
     #print(events_pr)
     #sys.exit()      
 
-    pickle.dump( events_wsn, open( f"wet_snow_{y}_v2.p", "wb" ) )
-    pickle.dump( events_sn, open( f"snow_{y}_v2.p", "wb" ) )
-    pickle.dump( events_pr, open( f"rain_{y}_v2.p", "wb" ) )    
-    pickle.dump( dur_events_wsn, open( f"wet_snow_{y}_duration.p", "wb" ) )
-    pickle.dump( dur_events_sn, open( f"snow_{y}_duration.p", "wb" ) )
-    pickle.dump( dur_events_pr, open( f"rain_{y}_duration.p", "wb" ) ) 
+    pickle.dump( events_wsn, open( f"wet_snow_{y}_v2_3h.p", "wb" ) )
+    pickle.dump( events_sn, open( f"snow_{y}_v2_3h.p", "wb" ) )
+    pickle.dump( events_pr, open( f"rain_{y}_v2_3h.p", "wb" ) )    
+    pickle.dump( dur_events_wsn, open( f"wet_snow_{y}_duration_3h.p", "wb" ) )
+    pickle.dump( dur_events_sn, open( f"snow_{y}_duration_3h.p", "wb" ) )
+    pickle.dump( dur_events_pr, open( f"rain_{y}_duration_3h.p", "wb" ) ) 
 
 
 def getEvents(data, events, dur_events):
@@ -169,8 +169,9 @@ def getEvents(data, events, dur_events):
     elif item == 0 or np.isnan(item):
       # Streak ended
       # Waiting 6 hours before going to the next event
+      # Making 3 hours to see how it changs
       i += 1
-      if i < 6:
+      if i < 3:
         dur += 1
         continue
       else:      
