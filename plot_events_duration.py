@@ -38,6 +38,11 @@ def main():
 
   # annual data
   i = 0
+
+  events_wsn = np.zeros([12,6,240])
+  events_sn = np.zeros([12,6,320])
+  events_pr = np.zeros([12,6,480])
+
   for y in range(datai, dataf+1):
     print(f"Year: {y}")
 
