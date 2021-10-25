@@ -108,7 +108,7 @@ def plotEventDuration(bins, labels, city, xlabel, fname):
   plt.grid(axis='y', linestyle = '--', linewidth = 0.5, color='gray')
   plt.title(f'{city}, NB', fontsize=26)
   
-  plt.savefig(f'{fname}_{xlabel}.png'.replace(' ', '_'))
+  plt.savefig(f'{fname}_{city}_duration.png'.replace(' ', '_'))
 
 
 
