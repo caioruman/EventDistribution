@@ -106,7 +106,7 @@ def plotEventDuration(bins, labels, city, xlabel, fname):
   fig, ax = plt.subplots(figsize=(16,10))
   width=4
   #labels = np.arange(0,320,6)
-  ax1 = ax.bar(labels[1:20], bins[0,1:20], width)
+  ax1 = ax.bar(labels[1:20], bins[1:20], width)
   plt.xticks(np.arange(0,320,6)[1:20],fontsize=22)
   plt.yticks(np.arange(0,1401,200), fontsize=22)
   plt.xlabel(f'{xlabel} duration [hours]', fontsize=22)
