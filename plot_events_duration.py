@@ -108,7 +108,7 @@ def plotEventDuration(bins, labels, city, xlabel, fname):
   #labels = np.arange(0,320,6)
   ax1 = ax.bar(labels[1:20], bins[1:20], width)
   plt.xticks(np.arange(0,320,6)[1:20],fontsize=22)
-  plt.yticks(np.arange(0,1401,200), fontsize=22)
+  plt.yticks(np.arange(0,2001,200), fontsize=22)
   plt.xlabel(f'{xlabel} duration [hours]', fontsize=22)
   plt.grid(axis='y', linestyle = '--', linewidth = 0.5, color='gray')
   plt.title(f'{city}, NB', fontsize=26)
