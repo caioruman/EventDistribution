@@ -125,14 +125,11 @@ def main():
 
         ii, jj = geo_idx([lat, lon], np.array([pr_lat, pr_lon]))
 
-        aux_wsn = wsn.SN_4C[:,i,j]
+        aux_wsn = np.nan_to_num(wsn.SN_4C[:,i,j])
         aux_sn = sn[:,ii,jj]
         aux_uu = uu[:,ii,jj]
         aux_vv = vv[:,ii,jj]
-        aux_pr = pr[:,ii,jj]
-
-        print(np.sum(aux_wsn - aux_sn))
-        sys.exit()
+        aux_pr = pr[:,ii,jj]                
 
         events_wsn[m-1,k,:], dur_events_wsn[m-1,k,:] = getEvents(aux_wsn, events_wsn[m-1,k,:], dur_events_wsn[m-1,k,:])    
         events_sn[m-1,k,:], dur_events_sn[m-1,k,:] = getEvents(aux_sn, events_sn[m-1,k,:], dur_events_sn[m-1,k,:])
@@ -146,12 +143,12 @@ def main():
     #print(events_pr)
     #sys.exit()      
 
-    pickle.dump( events_wsn, open( f"wet_snow_{y}_v2_3h.p", "wb" ) )
-    pickle.dump( events_sn, open( f"snow_{y}_v2_3h.p", "wb" ) )
-    pickle.dump( events_pr, open( f"rain_{y}_v2_3h.p", "wb" ) )    
-    pickle.dump( dur_events_wsn, open( f"wet_snow_{y}_duration_3h.p", "wb" ) )
-    pickle.dump( dur_events_sn, open( f"snow_{y}_duration_3h.p", "wb" ) )
-    pickle.dump( dur_events_pr, open( f"rain_{y}_duration_3h.p", "wb" ) ) 
+    pickle.dump( events_wsn, open( f"wet_snow_{y}_v2.p", "wb" ) )
+    pickle.dump( events_sn, open( f"snow_{y}_v2.p", "wb" ) )
+    pickle.dump( events_pr, open( f"rain_{y}_v2.p", "wb" ) )    
+    pickle.dump( dur_events_wsn, open( f"wet_snow_{y}_duration.p", "wb" ) )
+    pickle.dump( dur_events_sn, open( f"snow_{y}_duration.p", "wb" ) )
+    pickle.dump( dur_events_pr, open( f"rain_{y}_duration.p", "wb" ) ) 
 
 
 def getEvents(data, events, dur_events):
@@ -164,12 +161,10 @@ def getEvents(data, events, dur_events):
   for k in range(len(data)):
     item = data[k]
 
-    # Check each item in the array. While not 0, add to aux. When 0, store aux, set it to 0. Get the max wind between the start and end.
-    if np.isnan(item) and aux == 0:
-      continue
+    # Check each item in the array. While not 0, add to aux. When 0, store aux, set it to 0. Get the max wind between the start and end.    
     if item == 0 and aux == 0:
       continue
-    elif item == 0 or np.isnan(item):
+    elif item == 0:
       # Streak ended
       # Waiting 6 hours before going to the next event
       # Making 3 hours to see how it changs
