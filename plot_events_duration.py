@@ -106,14 +106,14 @@ def plotEventDuration(bins, labels, city, xlabel, fname):
   fig, ax = plt.subplots(figsize=(16,10))
   width=4
   #labels = np.arange(0,320,6)
-  ax1 = ax.bar(labels[1:20], bins[1:20], width)
-  plt.xticks(np.arange(0,320,6)[1:20],fontsize=22)
-  plt.yticks(np.arange(0,2001,200), fontsize=22)
+  ax1 = ax.bar(labels[2:20], bins[2:20], width)
+  plt.xticks(np.arange(0,320,6)[2:20],fontsize=22)
+  plt.yticks(np.arange(0,166,200), fontsize=22)
   plt.xlabel(f'{xlabel} duration [hours]', fontsize=22)
   plt.grid(axis='y', linestyle = '--', linewidth = 0.5, color='gray')
   plt.title(f'{city}, NB', fontsize=26)
   
-  plt.savefig(f'{fname}_{city}_duration.png'.replace(' ', '_'))
+  plt.savefig(f'{fname}_{city}_duration_v2.png'.replace(' ', '_'))
 
 
 
