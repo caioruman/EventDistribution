@@ -131,6 +131,9 @@ def main():
         aux_vv = vv[:,ii,jj]
         aux_pr = pr[:,ii,jj]
 
+        print(np.sum(aux_wsn - aux_sn))
+        sys.exit()
+
         events_wsn[m-1,k,:], dur_events_wsn[m-1,k,:] = getEvents(aux_wsn, events_wsn[m-1,k,:], dur_events_wsn[m-1,k,:])    
         events_sn[m-1,k,:], dur_events_sn[m-1,k,:] = getEvents(aux_sn, events_sn[m-1,k,:], dur_events_sn[m-1,k,:])
         events_pr[m-1,k,:], dur_events_pr[m-1,k,:] = getEvents(aux_pr, events_pr[m-1,k,:], dur_events_pr[m-1,k,:])
