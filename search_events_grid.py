@@ -147,8 +147,8 @@ def main():
     #sys.exit()      
 
     print('writing pickles')
-    pickle.dump( events_wsn, open( f"wet_snow_{y}_v2.p", "wb" ) )
-    pickle.dump( events_sn, open( f"snow_{y}_v2.p", "wb" ) )
+    pickle.dump( events_wsn, open( f"wet_snow_{y}_{m:02d}_v3.p", "wb" ) )
+    pickle.dump( events_sn, open( f"snow_{y}__{m:02d}_v3.p", "wb" ) )
     #pickle.dump( events_pr, open( f"rain_{y}_v2.p", "wb" ) )    
     #pickle.dump( dur_events_wsn, open( f"wet_snow_{y}_duration.p", "wb" ) )
     #pickle.dump( dur_events_sn, open( f"snow_{y}_duration.p", "wb" ) )
