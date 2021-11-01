@@ -100,6 +100,7 @@ def main():
       i1=721; j1=1167; i2=874; j2=1333
       
       sn = sn.SNOW_ACC_NC
+      wsn = wsn.SN_4C
       xlat = sn.XLAT
       xlon = sn.XLONG
       sn = sn[:,i1:i2,j1:j2] 
