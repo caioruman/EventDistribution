@@ -18,7 +18,7 @@ from dask import delayed
 def main():
 
   from dask.distributed import Client, progress
-  client = Client(threads_per_worker=8, n_workers=4)
+  client = Client(threads_per_worker=10, n_workers=5)
   client
 
   sim = "CTRL"
@@ -43,14 +43,23 @@ def main():
   #events_pr = np.zeros([12,6,6])
   #dur_events_pr = np.zeros([12,6,480])
 
-  events_wsn = np.empty((12,153,166), dtype=object)
-  events_sn = np.empty((12,153,166), dtype=object)
+  #events_wsn = np.empty((12,153,166), dtype=object)
+  #events_sn = np.empty((12,153,166), dtype=object)
+
+  events_wsn = np.empty((153,166), dtype=object)
+  events_sn = np.empty((153,166), dtype=object)
+
+  #for i in range(events_sn.shape[0]):
+  #  for j in range(events_sn.shape[1]):
+  #    for k in range(events_sn.shape[2]):
+  #      events_sn[i,j,k] = []
+  #      events_wsn[i,j,k] = []
 
   for i in range(events_sn.shape[0]):
     for j in range(events_sn.shape[1]):
-      for k in range(events_sn.shape[2]):
-        events_sn[i,j,k] = []
-        events_wsn[i,j,k] = []
+      #for k in range(events_sn.shape[2]):
+      events_sn[i,j] = []
+      events_wsn[i,j] = []
 
   '''
  Start parameters: 
@@ -140,8 +149,8 @@ def main():
           #print('2')
           datei = datetime.utcfromtimestamp(wsn[0].Time.values.astype(int)*ns)
           #print('3')
-          events_wsn[m-1,i,j] = getEvents(wsn[:,i,j], events_wsn[m-1,i,j], datei)
-          events_sn[m-1,i,j] = getEvents(sn[:,i,j], events_sn[m-1,i,j], datei)
+          events_wsn[i,j] = getEvents(wsn[:,i,j], events_wsn[i,j], datei)
+          events_sn[i,j] = getEvents(sn[:,i,j], events_sn[i,j], datei)
           #sys.exit()    
       #events_wsn = computeArray(wsn, events_wsn, m)
       #events_sn = computeArray(sn, events_sn, m)
@@ -157,16 +166,25 @@ def main():
     #print(events_sn)
     #print(events_pr)
     #sys.exit()      
-    print('start computing dask stuff')
-    shape = events_wsn.shape
-    results_wsn = dask.compute(*events_wsn.flatten())
-    results_sn = dask.compute(*events_sn.flatten())
+      print('start computing dask stuff')
+      shape = events_wsn.shape
+      results_wsn = dask.compute(*events_wsn.flatten())
+      results_sn = dask.compute(*events_sn.flatten())
 
-    results_wsn_p = np.array(results_wsn, dtype=object).reshape(shape)
-    results_sn_p = np.array(results_sn, dtype=object).reshape(shape)
-    print('writing pickles')
-    pickle.dump( results_wsn_p, open( f"wet_snow_{y}_{m:02d}_v3.p", "wb" ) )
-    pickle.dump( results_sn_p, open( f"snow_{y}__{m:02d}_v3.p", "wb" ) )
+      results_wsn_p = np.array(results_wsn, dtype=object).reshape(shape)
+      results_sn_p = np.array(results_sn, dtype=object).reshape(shape)
+      print('writing pickles')
+      pickle.dump( results_wsn_p, open( f"wet_snow_{y}_{m:02d}_v3.p", "wb" ) )
+      pickle.dump( results_sn_p, open( f"snow_{y}__{m:02d}_v3.p", "wb" ) )
+
+      events_wsn = np.empty((153,166), dtype=object)
+      events_sn = np.empty((153,166), dtype=object)
+
+      for i in range(events_sn.shape[0]):
+        for j in range(events_sn.shape[1]):
+          #for k in range(events_sn.shape[2]):
+          events_sn[i,j] = []
+          events_wsn[i,j] = []
     #pickle.dump( events_pr, open( f"rain_{y}_v2.p", "wb" ) )    
     #pickle.dump( dur_events_wsn, open( f"wet_snow_{y}_duration.p", "wb" ) )
     #pickle.dump( dur_events_sn, open( f"snow_{y}_duration.p", "wb" ) )
