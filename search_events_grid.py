@@ -18,7 +18,7 @@ from dask import delayed
 def main():
 
   from dask.distributed import Client, progress
-  client = Client(threads_per_worker=10, n_workers=5)
+  client = Client(threads_per_worker=8, n_workers=6)
   client
 
   sim = "CTRL"
