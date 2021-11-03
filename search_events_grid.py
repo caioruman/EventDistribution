@@ -15,6 +15,9 @@ from dask import delayed
 #import cartopy.feature as cfeature         # Import cartopy common features
 #import matplotlib.colors
 
+from dask.distributed import Client, progress
+client = Client(threads_per_worker=4, n_workers=4)
+client
 
 def main():
 
@@ -22,7 +25,7 @@ def main():
   st = f"/chinook/marinier/CONUS_2D/{sim}"
 
   datai = 2000
-  dataf = 2013  
+  dataf = 2000  
 
   store = '/chinook/cruman/Data/WetSnow' 
 
@@ -131,14 +134,22 @@ def main():
       #vv = vv.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
       #pr = pr.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))  
       #pr = pr - sn      
-          
-      events_wsn = computeArray(wsn, events_wsn, m)
-      events_sn = computeArray(sn, events_sn, m)
+
+      for i in range(wsn.shape[1]):
+        for j in range(wsn.shape[2]):
+          #print('2')
+          datei = datetime.utcfromtimestamp(wsn[0].Time.values.astype(int)*ns)
+          #print('3')
+          events_wsn[m-1,i,j] = getEvents(wsn[:,i,j], events_wsn[m-1,i,j], datei)
+          events_sn[m-1,i,j] = getEvents(sn[:,i,j], events_sn[m-1,i,j], datei)
+          #sys.exit()    
+      #events_wsn = computeArray(wsn, events_wsn, m)
+      #events_sn = computeArray(sn, events_sn, m)
         #events_pr[m-1,k,:], dur_events_pr[m-1,k,:] = getEvents(aux_pr, events_pr[m-1,k,:], dur_events_pr[m-1,k,:])
-      print(events_sn[m,:,:])
-      print('start computing dask stuff')
-      events_wsn = events_wsn.compute()
-      events_sn = events_sn.compute()
+      #print(events_sn[m,:,:])
+      
+      #events_wsn = events_wsn.compute()
+      #events_sn = events_sn.compute()
         # 0-10, 10-20, 20-30, 30-40, 40-50, 50+
       #  events_limits = [10,20,30,40,50,60]
     
@@ -146,16 +157,22 @@ def main():
     #print(events_sn)
     #print(events_pr)
     #sys.exit()      
+    print('start computing dask stuff')
+    shape = events_wsn.shape
+    results_wsn = dask.compute(*events_wsn.flatten())
+    results_sn = dask.compute(*events_sn.flatten())
 
+    results_wsn_p = np.array(results_wsn, dtype=object).reshape(shape)
+    results_sn_p = np.array(results_sn, dtype=object).reshape(shape)
     print('writing pickles')
-    pickle.dump( events_wsn, open( f"wet_snow_{y}_{m:02d}_v3.p", "wb" ) )
-    pickle.dump( events_sn, open( f"snow_{y}__{m:02d}_v3.p", "wb" ) )
+    pickle.dump( results_wsn_p, open( f"wet_snow_{y}_{m:02d}_v3.p", "wb" ) )
+    pickle.dump( results_sn_p, open( f"snow_{y}__{m:02d}_v3.p", "wb" ) )
     #pickle.dump( events_pr, open( f"rain_{y}_v2.p", "wb" ) )    
     #pickle.dump( dur_events_wsn, open( f"wet_snow_{y}_duration.p", "wb" ) )
     #pickle.dump( dur_events_sn, open( f"snow_{y}_duration.p", "wb" ) )
     #pickle.dump( dur_events_pr, open( f"rain_{y}_duration.p", "wb" ) ) 
 
-@delayed
+#@delayed
 def computeArray(wsn, events_wsn, m):
   ns = 1e-9
   for i in range(wsn.shape[1]):
@@ -183,7 +200,7 @@ class Event:
   #def set_total(self, new_total):
     #self.total = new_total 
 
-#@delayed
+@delayed
 def getEvents(data, events, dateIni, aux=0, i=0, dur=0):
   # This must also receive the values of aux, i and dur, so it can continue from the last month read
 
