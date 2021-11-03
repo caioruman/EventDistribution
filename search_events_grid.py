@@ -15,11 +15,11 @@ from dask import delayed
 #import cartopy.feature as cfeature         # Import cartopy common features
 #import matplotlib.colors
 
-from dask.distributed import Client, progress
-client = Client(threads_per_worker=10, n_workers=1)
-client
-
 def main():
+
+  from dask.distributed import Client, progress
+  client = Client(threads_per_worker=10, n_workers=1)
+  client
 
   sim = "CTRL"
   st = f"/chinook/marinier/CONUS_2D/{sim}"
