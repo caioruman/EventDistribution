@@ -20,7 +20,7 @@ from dask import delayed
 def main():
 
   from dask.distributed import Client, progress
-  client = Client(threads_per_worker=8, n_workers=6)
+  client = Client(threads_per_worker=8, n_workers=7)
   client
 
   sim = "CTRL"
@@ -247,7 +247,7 @@ def getEvents(data, events, dateIni, aux=0, i=0, dur=0):
   # 1 Grid, the size of the domain.  
 
   for k in range(len(data)):
-    item = data[k]
+    item = data[k].values
 
     # Check each item in the array. While not 0, add to aux. When 0, store aux, set it to 0. Get the max wind between the start and end.    
     if item == 0 and aux == 0:
@@ -286,7 +286,7 @@ def getEvents(data, events, dateIni, aux=0, i=0, dur=0):
 
   #if dur != 0:
   #  date = 
-  return events, aux, i, dur
+  return events#, aux, i, dur
 
              
 
