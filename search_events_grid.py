@@ -101,6 +101,9 @@ def main():
       if (y == 2013) and m > 9:
         continue
 
+      if (m >= 5 and m <= 9):
+        continue
+
       wsn = xr.open_dataset(f'{store}/{y}/WetSnow_SN_{y}{mi:02d}-{y}{mf:02d}.nc', engine='netcdf4')
           
       sn = xr.open_dataset(f'{st}/{y}/wrf2d_d01_CTRL_SNOW_ACC_NC_{y}{mi:02d}-{y}{mf:02d}.nc', engine='netcdf4')
@@ -166,15 +169,23 @@ def main():
     #print(events_sn)
     #print(events_pr)
     #sys.exit()      
-      print('start computing dask stuff')
+      print('start computing dask stuff - WSN')
       shape = events_wsn.shape
-      results_wsn = dask.compute(*events_wsn.flatten())
-      results_sn = dask.compute(*events_sn.flatten())
 
+      results_wsn = events_wsn.flatten()
       results_wsn_p = np.array(results_wsn, dtype=object).reshape(shape)
-      results_sn_p = np.array(results_sn, dtype=object).reshape(shape)
+      sys.exit()
+      results_wsn = dask.compute(*events_wsn.flatten())      
+      results_wsn_p = np.array(results_wsn, dtype=object).reshape(shape)
+
       print('writing pickles')
       pickle.dump( results_wsn_p, open( f"wet_snow_{y}_{m:02d}_v3.p", "wb" ) )
+
+      print('start computing dask stuff - SN')
+      results_sn = dask.compute(*events_sn.flatten())
+      results_sn_p = np.array(results_sn, dtype=object).reshape(shape)
+
+      print('writing pickles')
       pickle.dump( results_sn_p, open( f"snow_{y}__{m:02d}_v3.p", "wb" ) )
 
       events_wsn = np.empty((153,166), dtype=object)
@@ -254,7 +265,7 @@ def getEvents(data, events, dateIni, aux=0, i=0, dur=0):
       # get max wind
       # for later
       # store aux
-        if dur >= 23:
+        if dur >= 11:
           date = dateIni + relativedelta(hours=k - i)
           events.append(Event(dur, aux, date))
         #events[index] += 1
