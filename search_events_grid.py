@@ -16,7 +16,7 @@ from dask import delayed
 #import matplotlib.colors
 
 from dask.distributed import Client, progress
-client = Client(threads_per_worker=4, n_workers=4)
+client = Client(threads_per_worker=10, n_workers=1)
 client
 
 def main():
