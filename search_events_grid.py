@@ -15,6 +15,8 @@ from dask import delayed
 #import cartopy.feature as cfeature         # Import cartopy common features
 #import matplotlib.colors
 
+# First run for SN, than after that for WSN
+
 def main():
 
   from dask.distributed import Client, progress
@@ -46,7 +48,7 @@ def main():
   #events_wsn = np.empty((12,153,166), dtype=object)
   #events_sn = np.empty((12,153,166), dtype=object)
 
-  events_wsn = np.empty((153,166), dtype=object)
+  #events_wsn = np.empty((153,166), dtype=object)
   events_sn = np.empty((153,166), dtype=object)
 
   #for i in range(events_sn.shape[0]):
@@ -59,7 +61,7 @@ def main():
     for j in range(events_sn.shape[1]):
       #for k in range(events_sn.shape[2]):
       events_sn[i,j] = []
-      events_wsn[i,j] = []
+      #events_wsn[i,j] = []
 
   '''
  Start parameters: 
@@ -104,7 +106,7 @@ def main():
       if (m >= 5 and m <= 9):
         continue
 
-      wsn = xr.open_dataset(f'{store}/{y}/WetSnow_SN_{y}{mi:02d}-{y}{mf:02d}.nc', engine='netcdf4')
+      #wsn = xr.open_dataset(f'{store}/{y}/WetSnow_SN_{y}{mi:02d}-{y}{mf:02d}.nc', engine='netcdf4')
           
       sn = xr.open_dataset(f'{st}/{y}/wrf2d_d01_CTRL_SNOW_ACC_NC_{y}{mi:02d}-{y}{mf:02d}.nc', engine='netcdf4')
       #uu = xr.open_dataset(f'{st}/{y}/wrf2d_d01_CTRL_EU10_{y}{mi:02d}-{y}{mf:02d}.nc', engine='netcdf4')
@@ -115,7 +117,7 @@ def main():
       i1=721; j1=1167; i2=874; j2=1333
       
       sn = sn.SNOW_ACC_NC
-      wsn = wsn.SN_4C
+      #wsn = wsn.SN_4C
       xlat = sn.XLAT
       xlon = sn.XLONG
       sn = sn[:,i1:i2,j1:j2] 
@@ -140,19 +142,19 @@ def main():
     
       #print(wsn)
 
-      wsn = wsn.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
+      #wsn = wsn.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
       sn = sn.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
       #uu = uu.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
       #vv = vv.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
       #pr = pr.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))  
       #pr = pr - sn      
 
-      for i in range(wsn.shape[1]):
-        for j in range(wsn.shape[2]):
+      for i in range(sn.shape[1]):
+        for j in range(sn.shape[2]):
           #print('2')
-          datei = datetime.utcfromtimestamp(wsn[0].Time.values.astype(int)*ns)
+          datei = datetime.utcfromtimestamp(sn[0].Time.values.astype(int)*ns)
           #print('3')
-          events_wsn[i,j] = getEvents(wsn[:,i,j], events_wsn[i,j], datei)
+          #events_wsn[i,j] = getEvents(wsn[:,i,j], events_wsn[i,j], datei)
           events_sn[i,j] = getEvents(sn[:,i,j], events_sn[i,j], datei)
           #sys.exit()    
       #events_wsn = computeArray(wsn, events_wsn, m)
@@ -169,17 +171,17 @@ def main():
     #print(events_sn)
     #print(events_pr)
     #sys.exit()      
-      print('start computing dask stuff - WSN')
-      shape = events_wsn.shape
+      #print('start computing dask stuff - WSN')
+      shape = events_sn.shape
 
-      results_wsn = events_wsn.flatten()
-      results_wsn_p = np.array(results_wsn, dtype=object).reshape(shape)
-      sys.exit()
-      results_wsn = dask.compute(*events_wsn.flatten())      
-      results_wsn_p = np.array(results_wsn, dtype=object).reshape(shape)
+      #results_wsn = events_wsn.flatten()
+      #results_wsn_p = np.array(results_wsn, dtype=object).reshape(shape)
+      #sys.exit()
+      #results_wsn = dask.compute(*events_wsn.flatten())      
+      #results_wsn_p = np.array(results_wsn, dtype=object).reshape(shape)
 
-      print('writing pickles')
-      pickle.dump( results_wsn_p, open( f"wet_snow_{y}_{m:02d}_v3.p", "wb" ) )
+      #print('writing pickles')
+      #pickle.dump( results_wsn_p, open( f"wet_snow_{y}_{m:02d}_v3.p", "wb" ) )
 
       print('start computing dask stuff - SN')
       results_sn = dask.compute(*events_sn.flatten())
@@ -188,14 +190,15 @@ def main():
       print('writing pickles')
       pickle.dump( results_sn_p, open( f"snow_{y}__{m:02d}_v3.p", "wb" ) )
 
-      events_wsn = np.empty((153,166), dtype=object)
+      client.restart()
+      #events_wsn = np.empty((153,166), dtype=object)
       events_sn = np.empty((153,166), dtype=object)
 
       for i in range(events_sn.shape[0]):
         for j in range(events_sn.shape[1]):
           #for k in range(events_sn.shape[2]):
           events_sn[i,j] = []
-          events_wsn[i,j] = []
+          #events_wsn[i,j] = []
     #pickle.dump( events_pr, open( f"rain_{y}_v2.p", "wb" ) )    
     #pickle.dump( dur_events_wsn, open( f"wet_snow_{y}_duration.p", "wb" ) )
     #pickle.dump( dur_events_sn, open( f"snow_{y}_duration.p", "wb" ) )
