@@ -10,6 +10,7 @@ from dateutil.relativedelta import relativedelta
 import pickle
 import dask
 from dask import delayed
+import os
 #import matplotlib.pyplot as plt            # Module to produce figureimport matplotlib.colors as colors
 #import cartopy.crs as ccrs                 # Import cartopy ccrs
 #import cartopy.feature as cfeature         # Import cartopy common features
@@ -20,13 +21,13 @@ from dask import delayed
 def main():
 
   from dask.distributed import Client, progress
-  client = Client(threads_per_worker=2, n_workers=8)
+  client = Client(threads_per_worker=4, n_workers=5,local_directory="/chinook/cruman/Scripts/EventDistribution/tmp")
   client
 
   sim = "CTRL"
   st = f"/chinook/marinier/CONUS_2D/{sim}"
 
-  datai = 2000
+  datai = 2011
   dataf = 2013
 
   store = '/chinook/cruman/Data/WetSnow' 
@@ -88,7 +89,14 @@ def main():
       if (y == 2013) and m > 9:
         continue
 
-      if (m >= 5 and m <= 9):
+#      if (m >= 5 and m <= 9):
+#        continue
+
+      if (m < 5 or m > 9):
+        continue
+
+      if os.path.exists(f"pr_acc_{y}_{m:02d}_v3.p"):
+        print("jump")
         continue
 
       #wsn = xr.open_dataset(f'{store}/{y}/WetSnow_SN_{y}{mi:02d}-{y}{mf:02d}.nc', engine='netcdf4')

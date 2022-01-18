@@ -26,8 +26,8 @@ def main():
   sim = "CTRL"
   st = f"/chinook/marinier/CONUS_2D/{sim}"
 
-  datai = 2001
-  dataf = 2002  
+  datai = 2000
+  dataf = 2005 
 
   store = '/chinook/cruman/Data/WetSnow' 
 
@@ -49,7 +49,7 @@ def main():
   #events_sn = np.empty((12,153,166), dtype=object)
 
   #events_wsn = np.empty((153,166), dtype=object)
-  events_sn = np.empty((153,166), dtype=object)
+  events_wsn = np.empty((153,166), dtype=object)
 
   #for i in range(events_sn.shape[0]):
   #  for j in range(events_sn.shape[1]):
@@ -57,10 +57,10 @@ def main():
   #      events_sn[i,j,k] = []
   #      events_wsn[i,j,k] = []
 
-  for i in range(events_sn.shape[0]):
-    for j in range(events_sn.shape[1]):
+  for i in range(events_wsn.shape[0]):
+    for j in range(events_wsn.shape[1]):
       #for k in range(events_sn.shape[2]):
-      events_sn[i,j] = []
+      events_wsn[i,j] = []
       #events_wsn[i,j] = []
 
   '''
@@ -106,9 +106,9 @@ def main():
       if (m >= 5 and m <= 9):
         continue
 
-      #wsn = xr.open_dataset(f'{store}/{y}/WetSnow_SN_{y}{mi:02d}-{y}{mf:02d}.nc', engine='netcdf4')
+      wsn = xr.open_dataset(f'{store}/{y}/WetSnow_SN_{y}{mi:02d}-{y}{mf:02d}.nc', engine='netcdf4')
           
-      sn = xr.open_dataset(f'{st}/{y}/wrf2d_d01_CTRL_SNOW_ACC_NC_{y}{mi:02d}-{y}{mf:02d}.nc', engine='netcdf4')
+      #sn = xr.open_dataset(f'{st}/{y}/wrf2d_d01_CTRL_SNOW_ACC_NC_{y}{mi:02d}-{y}{mf:02d}.nc', engine='netcdf4')
       #uu = xr.open_dataset(f'{st}/{y}/wrf2d_d01_CTRL_EU10_{y}{mi:02d}-{y}{mf:02d}.nc', engine='netcdf4')
       #vv = xr.open_dataset(f'{st}/{y}/wrf2d_d01_CTRL_EV10_{y}{mi:02d}-{y}{mf:02d}.nc', engine='netcdf4')
       #pr = xr.open_dataset(f'{st}/{y}/wrf2d_d01_CTRL_PREC_ACC_NC_{y}{mi:02d}-{y}{mf:02d}.nc', engine='netcdf4')
@@ -116,11 +116,11 @@ def main():
       # Slicing the domain to make the computations faster
       i1=721; j1=1167; i2=874; j2=1333
       
-      sn = sn.SNOW_ACC_NC
-      #wsn = wsn.SN_4C
-      xlat = sn.XLAT
-      xlon = sn.XLONG
-      sn = sn[:,i1:i2,j1:j2] 
+      #sn = sn.SNOW_ACC_NC
+      wsn = wsn.SN_4C
+      xlat = wsn.XLAT
+      xlon = wsn.XLONG
+      #sn = sn[:,i1:i2,j1:j2] 
         
       #uu = uu.EU10
       #uu = uu[:,i1:i2,j1:j2]
@@ -142,20 +142,20 @@ def main():
     
       #print(wsn)
 
-      #wsn = wsn.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
-      sn = sn.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
+      wsn = wsn.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
+      #sn = sn.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
       #uu = uu.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
       #vv = vv.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
       #pr = pr.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))  
       #pr = pr - sn      
 
-      for i in range(sn.shape[1]):
-        for j in range(sn.shape[2]):
+      for i in range(wsn.shape[1]):
+        for j in range(wsn.shape[2]):
           #print('2')
-          datei = datetime.utcfromtimestamp(sn[0].Time.values.astype(int)*ns)
+          datei = datetime.utcfromtimestamp(wsn[0].Time.values.astype(int)*ns)
           #print('3')
-          #events_wsn[i,j] = getEvents(wsn[:,i,j], events_wsn[i,j], datei)
-          events_sn[i,j] = getEvents(sn[:,i,j], events_sn[i,j], datei)
+          events_wsn[i,j] = getEvents(wsn[:,i,j], events_wsn[i,j], datei)
+          #events_sn[i,j] = getEvents(sn[:,i,j], events_sn[i,j], datei)
           #sys.exit()    
       #events_wsn = computeArray(wsn, events_wsn, m)
       #events_sn = computeArray(sn, events_sn, m)
@@ -172,7 +172,7 @@ def main():
     #print(events_pr)
     #sys.exit()      
       #print('start computing dask stuff - WSN')
-      shape = events_sn.shape
+      shape = events_wsn.shape
 
       #results_wsn = events_wsn.flatten()
       #results_wsn_p = np.array(results_wsn, dtype=object).reshape(shape)
@@ -183,21 +183,21 @@ def main():
       #print('writing pickles')
       #pickle.dump( results_wsn_p, open( f"wet_snow_{y}_{m:02d}_v3.p", "wb" ) )
 
-      print('start computing dask stuff - SN')
-      results_sn = dask.compute(*events_sn.flatten())
-      results_sn_p = np.array(results_sn, dtype=object).reshape(shape)
+      print('start computing dask stuff - WSN')
+      results_wsn = dask.compute(*events_wsn.flatten())
+      results_wsn_p = np.array(results_wsn, dtype=object).reshape(shape)
 
       print('writing pickles')
-      pickle.dump( results_sn_p, open( f"snow_{y}__{m:02d}_v3.p", "wb" ) )
+      pickle.dump( results_wsn_p, open( f"wetsnow_{y}_{m:02d}_3h.p", "wb" ) )
 
       client.restart()
       #events_wsn = np.empty((153,166), dtype=object)
-      events_sn = np.empty((153,166), dtype=object)
+      events_wsn = np.empty((153,166), dtype=object)
 
-      for i in range(events_sn.shape[0]):
-        for j in range(events_sn.shape[1]):
+      for i in range(events_wsn.shape[0]):
+        for j in range(events_wsn.shape[1]):
           #for k in range(events_sn.shape[2]):
-          events_sn[i,j] = []
+          events_wsn[i,j] = []
           #events_wsn[i,j] = []
     #pickle.dump( events_pr, open( f"rain_{y}_v2.p", "wb" ) )    
     #pickle.dump( dur_events_wsn, open( f"wet_snow_{y}_duration.p", "wb" ) )
@@ -257,7 +257,7 @@ def getEvents(data, events, dateIni, aux=0, i=0, dur=0):
       # Waiting 6 hours before going to the next event
       # Making 3 hours to see how it changs
       i += 1
-      if i < 6:
+      if i < 3:
         dur += 1
         continue
       else:      
