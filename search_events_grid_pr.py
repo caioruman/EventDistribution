@@ -20,9 +20,8 @@ import os
 
 def main():
 
-  from dask.distributed import Client, progress
-  client = Client(threads_per_worker=4, n_workers=5,local_directory="/chinook/cruman/Scripts/EventDistribution/tmp")
-  client
+  from dask.distributed import Client, LocalCluster, progress
+  
 
   sim = "CTRL"
   st = f"/chinook/marinier/CONUS_2D/{sim}"
@@ -143,7 +142,8 @@ def main():
       #uu = uu.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
       #vv = vv.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))
       #pr = pr.sel(Time=slice(datai.strftime('%Y-%m-%d %H:%M'), dataf.strftime('%Y-%m-%d %H:%M')))  
-      #pr = pr - sn      
+      #pr = pr - sn  
+      #          
 
       for i in range(sn.shape[1]):
         for j in range(sn.shape[2]):
@@ -180,13 +180,22 @@ def main():
       #pickle.dump( results_wsn_p, open( f"wet_snow_{y}_{m:02d}_v3.p", "wb" ) )
 
       print('start computing dask stuff - SN')
-      results_sn = dask.compute(*events.flatten())
-      results_sn_p = np.array(results_sn, dtype=object).reshape(shape)
+
+      #client = Client(threads_per_worker=4, n_workers=5,)
+      #client 
+
+      with LocalCluster(n_workers=5,
+        threads_per_worker=4,
+        local_directory="/chinook/cruman/Scripts/EventDistribution/tmp",
+      ) as cluster, Client(cluster) as client:
+        # Do something using 'client'
+        results_sn = dask.compute(*events.flatten())
+        results_sn_p = np.array(results_sn, dtype=object).reshape(shape)
 
       print('writing pickles')
       pickle.dump( results_sn_p, open( f"pr_acc_{y}_{m:02d}_v3.p", "wb" ) )
 
-      client.restart()
+      #client.restart()
       #events_wsn = np.empty((153,166), dtype=object)
       events = np.empty((153,166), dtype=object)
 
