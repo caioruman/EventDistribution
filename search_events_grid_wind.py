@@ -152,6 +152,7 @@ def main():
         local_directory="/chinook/cruman/Scripts/EventDistribution/tmp",
       ) as cluster, Client(cluster) as client:
         # Do something using 'client'
+        client
         results_sn = dask.compute(*events.flatten())
         results_sn_p = np.array(results_sn, dtype=object).reshape(shape)
 
@@ -166,14 +167,17 @@ def main():
           events[i,j] = []          
 
 class Event:
-  def __init__(self, length, intensity, initialDate, wind, wind_count, wetSnow, wetSnow_count): #, total):
+  def __init__(self, length, intensity, initialDate, wind, wind_count, wind_avg, wind_max, wetSnow, wetSnow_count, wetSnow_total): #, total):
     self.length = length
     self.intensity = intensity
     self.initialDate = initialDate
     self.wind = wind    
     self.wetSnow = wetSnow
     self.wind_count = wind_count    
+    self.wind_avg = wind_avg
+    self.wind_max = wind_max
     self.wetSnow_count = wetSnow_count
+    self.wetSnow_total = wetSnow_total
     #self.total = total
   def set_length(self, new_l):
     self.length = new_l
@@ -187,12 +191,18 @@ class Event:
     self.wind = new_w  
   def set_wind_count(self, new_w_c):
     self.wind_count = new_w_c  
+  def set_wind_avg(self, new_w_avg):
+    self.wind_avg = new_w_avg
+  def set_wind_max(self, new_w_m):
+    self.wind_max = new_w_m
   # Array with the values
   # Array was taking too long. It's a 1 or 0 now
   def set_wetSnow(self, new_ws):
     self.wetSnow = new_ws
   def set_wetSnow_count(self, new_ws_c):
     self.wetSnow_count = new_ws_c
+  def set_wetSnow_total(self, new_ws_t):
+    self.wetSnow_total = new_ws_t
   #def set_total(self, new_total):
     #self.total = new_total 
 
