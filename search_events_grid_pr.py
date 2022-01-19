@@ -189,6 +189,7 @@ def main():
         local_directory="/chinook/cruman/Scripts/EventDistribution/tmp",
       ) as cluster, Client(cluster) as client:
         # Do something using 'client'
+        client
         results_sn = dask.compute(*events.flatten())
         results_sn_p = np.array(results_sn, dtype=object).reshape(shape)
 
