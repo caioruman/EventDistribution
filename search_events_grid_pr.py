@@ -26,8 +26,8 @@ def main():
   sim = "CTRL"
   st = f"/chinook/marinier/CONUS_2D/{sim}"
 
-  datai = 2011
-  dataf = 2013
+  datai = 2000
+  dataf = 2011
 
   store = '/chinook/cruman/Data/WetSnow' 
 
