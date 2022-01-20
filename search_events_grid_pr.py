@@ -184,8 +184,8 @@ def main():
       #client = Client(threads_per_worker=4, n_workers=5,)
       #client 
 
-      with LocalCluster(n_workers=7,
-        threads_per_worker=6,
+      with LocalCluster(n_workers=5,
+        threads_per_worker=4,
         local_directory="/chinook/cruman/Scripts/EventDistribution/tmp",
       ) as cluster, Client(cluster) as client:
         # Do something using 'client'
