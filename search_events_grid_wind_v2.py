@@ -187,8 +187,9 @@ class Event:
   #def set_total(self, new_total):
     #self.total = new_total 
 
+# I must remove 6 hours from every event due lines 210-211-212
 @delayed
-def getEvents(data, wsn, events, dateIni, aux=0, i=0, dur=0, aux_wsn=[]):
+def getEvents(data, wsn, events, dateIni, aux=0, i=0, dur=0, aux_wsn=0, dur_wsn=0):
   # This must also receive the values of aux, i and dur, so it can continue from the last month read    
   
   # Each grid stores a list of the object Event, that contains the intensity, length, initial date, wind for the duration of the event, wetSnow flag, and total
@@ -207,35 +208,35 @@ def getEvents(data, wsn, events, dateIni, aux=0, i=0, dur=0, aux_wsn=[]):
       # Waiting 6 hours before going to the next event      
       i += 1
       if i < 6:
-        dur += 1            
-        aux_wsn.append(wsn[k].values)
+        dur += 1                    
         continue
       else:            
       # I'm saving all events greater than 12h
       # Later I can filter for the larger events
-        if dur >= 12:
+        if dur >= 12 and aux_wsn > 0.1:
           date = dateIni + relativedelta(hours=k - i)
           # get uu, vv, wsn
           # code here                    
           #wetSnow = 0
           #wetSnow_count = 0
-          #wetSnow_total = 0
-          if True in np.greater(aux_wsn, 0.1):
-            #wetSnow = 1
-            wetSnow_count = np.count_nonzero(np.greater(aux_wsn, 0.1))
-            wetSnow_total = np.sum(aux_wsn)
-            events.append(Event(dur, aux, date, wetSnow_count, wetSnow_total))
+          #wetSnow_total = 0          
+          #wetSnow = 1
+          #wetSnow_count = np.count_nonzero(np.greater(aux_wsn, 0.1))            
+          events.append(Event(dur, aux, date, dur_wsn, aux_wsn))
       # reset aux
         aux = 0
         dur = 0
         i = 0             
-        aux_wsn = []
+        aux_wsn = 0
+        dur_wsn = 0
     else:
       # ongoing event. Store data
       aux += item
       i = 0
-      dur += 1      
-      aux_wsn.append(wsn[k].values)
+      dur += 1   
+      aux_wsn += wsn[k].values
+      if wsn[k].values > 0:
+        dur_wsn += 1
       #i += 1
   
   return events#, aux, i, dur
